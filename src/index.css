@@ -1,0 +1,186 @@
+body {
+  margin: 10px;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  background-color: #abdff3;
+  background-image: url(./resources/images/CloudCity.jpg);
+  background-size: cover;
+}
+.book-shelf {
+  display: flex;
+}
+.book {
+  width: 300px;
+  height: 410px;
+  flex: 1;
+}
+.book-card {
+  width: 300px;
+  height: 410px;
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  padding: 16px;
+  border-radius: 5px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.book-card .book-card-cover {
+  position: relative;
+  width: 263px;
+  height: 350px;
+  margin: 0 auto 8px auto;
+  perspective: 1000px;
+  cursor: pointer;
+}
+.book-card .book-card-book {
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: all 250ms ease;
+  box-shadow: 5px 6px 10px rgba(0, 0, 0, 0.16), 0 6px 10px rgba(0, 0, 0, 0.23);
+}
+.book-card .book-card-book-front {
+  position: absolute;
+  height: 100%;
+}
+.book-card .book-card-book-back {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  transform: translateZ(-40px);
+}
+.book-card .book-card-book-side {
+  position: absolute;
+  top: 5px;
+  bottom: 2px;
+  right: -29px;
+  width: 40px;
+  background-size: 5px;
+  background-color: #e1e1e1;
+  background-image: linear-gradient(to right, #ccc 35%, #e1e1e1 35%);
+  opacity: 0;
+  transform: rotate3d(0, 1, 0, 90deg);
+}
+.book-card .book-card-img {
+  width: 100%;
+  height: 100%;
+  background-color: #e1e1e1;
+  top: 0;
+  left: 0;
+}
+.book-card .book-card-title {
+  font-size: 1.3em;
+  margin-bottom: 8px;
+}
+.book-card .book-card-author {
+  color: #757575;
+  font-size: 1em;
+}
+.book-card-cover:hover .book-card-book {
+  transform: rotate3d(0, -1, 0, 30deg) translate(-15px, -30px);
+}
+.book-card-cover:hover .book-card-book-back {
+  box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.35);
+}
+.book-card-cover:hover .book-card-book-side {
+  opacity: 1;
+}
+
+.book-card .book-card-cover {
+  transition: width 1s, height 1s, left 1s, top 1s;
+}
+.book-card-cover.opened {
+  position: fixed;
+  width: 550px;
+  height: 810px;
+  top: 30px;
+  left: 1000px;
+  z-index: 100;
+  transition: width 1s, height 1s, left 1s, top 1s;
+}
+.book-card-cover.opened:hover .book-card-book {
+  transform: none;
+}
+
+.openedBook {
+  --x-shadow: -10px;
+  --y-shadow: 10px;
+  padding: 10px;
+  height: 1000px;
+  background-image: url(./resources/images/Storybook5.png);
+  background-size: cover;
+  background-size: 1649px 1000px;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter:drop-shadow(var(--x-shadow) var(--y-shadow) 5px rgb(87, 71, 66, 0.3))
+}
+
+.test.stf__parent {
+  padding-top: 28px;
+}
+
+.bookPage {
+  width: 500px;
+  background-size: cover;
+  /*border: 1px solid #c2b5a3;*/
+  font-size: 1.5em;
+  text-align: center;
+  word-wrap: break-word;
+  position: relative;
+}
+.bookPage.--right {
+  border-left: 0;
+  /*box-shadow: inset 7px 0 30px -7px rgb(0 0 0 / 40%);*/
+}
+.bookPage.--left {
+  border-right: 0;
+  /*box-shadow: inset -7px 0 30px -7px rgb(0 0 0 / 40%);*/
+}
+.bookPage.--left {
+  background-image: url(./resources/images/LeftPage4.png);
+}
+.bookPage.--right {
+  background-image: url(./resources/images/RightPage4.png);
+}
+.bookPage.--simple {
+  background-image: none;
+}
+
+.titlePage {
+  padding: 30px;
+  width: 550px;
+  margin: 0;
+  text-align: center;
+
+  position: absolute;
+  top: 30%;
+  transform: translateY(-50%);
+}
+
+.pageText {
+  padding: 50px;
+  padding-top: 100px;
+  width: 550px;
+  text-align: justify;
+  line-height: 2em;
+  
+  position: relative;
+  top: 40%;
+  transform: translateY(-50%);
+}
+
+.pageNumber {
+  position: absolute;
+  bottom: 30px;
+  right: 50%;
+  font-size: 1em;
+}
+
+.pageImage {
+  padding: 30px;
+  
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
