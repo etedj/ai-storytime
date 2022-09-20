@@ -7,6 +7,10 @@ import loadingGif from '../../resources/images/pencil3.gif'
 
 const AIStorytime = () => {
 
+    const bookSelected = false;
+    const randSeed = 0;
+    const imageStyle = "";
+
   const pageDivs = [];
   pageDivs.push(
     <div className="bookPage" key={"cover"}>
@@ -19,7 +23,7 @@ const AIStorytime = () => {
   pageDivs.push(
     <div className="bookPage" key={`title-book-${0}`}>
         <div className="titlePage">
-            <h1>{books[0].Title}</h1>
+            <h1 className="titlePageTitle">{books[0].Title}</h1>
             <h4>by {books[0].Author}</h4>
         </div>
     </div>
@@ -52,11 +56,11 @@ const AIStorytime = () => {
     event.currentTarget.style.setProperty('--y-shadow', (((window.innerHeight / 2) - event.clientY) / 20) + 'px');
   }
 
-
+//<OptionMenu />
+//<StyleChoicePicker />
+        
   return (
     <div>
-        <OptionMenu />
-        <StyleChoicePicker />
         <BookShelf />
         <div className="openedBook" onMouseMove={onMouseMoveOverBook}>
             <HTMLFlipBook 
