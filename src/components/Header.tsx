@@ -1,7 +1,9 @@
+import titleImg from '../resources/images/Title.png'
+
 const Header = () => {
   return (
     <header>
-        <h1>AI Storytime</h1>
+        <img src={titleImg}></img>
     </header>
   )
 }

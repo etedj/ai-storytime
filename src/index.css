@@ -7,9 +7,109 @@ body {
   background-size: cover;
   color: white;
 }
+header {
+  margin-top: 40px;
+  margin-bottom: 100px;
+}
+
+
+
+
+/* MRS-EAVES FONT */
+@import url("https://p.typekit.net/p.css?s=1&k=eel6ntc&ht=tk&f=28484.28485&a=52188319&app=typekit&e=css");
+@font-face {
+font-family:"mrs-eaves";
+src:url("https://use.typekit.net/af/23ea79/00000000000000007735b2ff/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff2"),url("https://use.typekit.net/af/23ea79/00000000000000007735b2ff/30/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff"),url("https://use.typekit.net/af/23ea79/00000000000000007735b2ff/30/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("opentype");
+font-display:auto;font-style:normal;font-weight:400;font-stretch:normal;
+}
+@font-face {
+font-family:"mrs-eaves";
+src:url("https://use.typekit.net/af/962d4f/00000000000000007735b300/30/l?subset_id=2&fvd=n7&v=3") format("woff2"),url("https://use.typekit.net/af/962d4f/00000000000000007735b300/30/d?subset_id=2&fvd=n7&v=3") format("woff"),url("https://use.typekit.net/af/962d4f/00000000000000007735b300/30/a?subset_id=2&fvd=n7&v=3") format("opentype");
+font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
+}
+
+/* Custom Checkbox Toggles */
+.toggler-wrapper {
+  display: block;
+  width: 45px;
+  height: 25px;
+  cursor: pointer;
+  position: relative;
+}
+.toggler-wrapper input[type="checkbox"] {
+  display: none;
+}
+.toggler-wrapper input[type="checkbox"]:checked+.toggler-slider {
+  background-color: #44cc66;
+}
+.toggler-wrapper .toggler-slider {
+  background-color: #ccc;
+  position: absolute;
+  border-radius: 100px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: all 300ms ease;
+  transition: all 300ms ease;
+}
+.toggler-wrapper .toggler-knob {
+  position: absolute;
+  -webkit-transition: all 300ms ease;
+  transition: all 300ms ease;
+}
+.toggler-wrapper.style-15 {
+  left: 30px;
+}
+.toggler-wrapper.style-15 input[type="checkbox"]:checked+.toggler-slider:before {
+  opacity: 0.5;
+}
+.toggler-wrapper.style-15 input[type="checkbox"]:checked+.toggler-slider:after {
+  opacity: 1;
+}
+.toggler-wrapper.style-15 input[type="checkbox"]:checked+.toggler-slider .toggler-knob {
+  left: calc(100% - 19px - 3px);
+}
+.toggler-wrapper.style-15 .toggler-slider:before {
+  content: 'Off';
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  font-size: 75%;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.toggler-wrapper.style-15 .toggler-slider:after {
+  content: 'On';
+  position: absolute;
+  top: 50%;
+  right: -25px;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  font-size: 75%;
+  text-transform: uppercase;
+  font-weight: 500;
+  opacity: 0.5;
+}
+.toggler-wrapper.style-15 .toggler-knob {
+  width: calc(25px - 6px);
+  height: calc(25px - 6px);
+  border-radius: 50%;
+  left: 3px;
+  top: 3px;
+  background-color: #fff;
+}
+
+
+
+/* Bookshelf */
 .book-shelf {
   display: flex;
 }
+
+/* Cards */
 .book {
   width: 300px;
   height: 410px;
@@ -89,45 +189,78 @@ body {
   opacity: 1;
 }
 
-.book-card .book-card-cover {
+.book-card-cover {
   transition: width 1s, height 1s, left 1s, top 1s;
 }
 .book-card-cover.opened {
   position: fixed;
   width: 631px;
   height: 855px;
-  top: 30px;
-  left: 1000px;
-  z-index: 100;
+  top: 52px;
+  left: 50%;
+  z-index: 2;
   transition: width 2s, height 2s, left 2s ease, top 2s ease;
 }
 .book-card-cover.opened:hover .book-card-book {
   transform: none;
 }
 
+
+/* Opened Book */
 .openedBook {
   --x-shadow: -10px;
   --y-shadow: 10px;
-  padding: 10px;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
   height: 1000px;
+  width: 1649px;
   color: black;
   background-image: url(./resources/images/Storybook5.png);
-  background-size: cover;
   background-size: 1649px 1000px;
   background-repeat: no-repeat;
-  background-position: center;
-  filter:drop-shadow(var(--x-shadow) var(--y-shadow) 5px rgb(87, 71, 66, 0.3))
+  background-position: 0;
+  z-index: 3;
+  filter:drop-shadow(var(--x-shadow) var(--y-shadow) 5px rgb(87, 71, 66, 0.3));
+
+	opacity: 1;
+	animation-name: fadeInOpacity;;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 1s;
 }
 
-.test.stf__parent {
-  padding-top: 28px;
+.openedBook.hide {
+	opacity: 0;
+	animation-name: fadeOutOpacity;;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 0.5s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@keyframes fadeOutOpacity {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
 }
 
 .bookPage {
   width: 500px;
   background-size: cover;
   /*border: 1px solid #c2b5a3;*/
-  font-size: 1.5em;
+  font-size: 1.6em;
   text-align: center;
   word-wrap: break-word;
   position: relative;
@@ -188,20 +321,117 @@ body {
   transform: translateY(-50%);
 }
 
-@font-face {
-  font-family: "storybook";
-  src: url(./resources/fonts/storybook.woff2)
-}
-
 .titlePageTitle {
-  font-family: "storybook";
-  font-size: 3em;
-  font-weight: 100;
+  font-family: "mrs-eaves", Georgia, 'Times New Roman', Times, serif;
+  font-size: 2.5em;
+  font-weight:bold;
 }
 
 header h1 {
-  font-family: "storybook";
   font-size: 6em;
   font-weight: 100;
   text-shadow: 4px 4px 5px black;
+}
+
+img.ai-image {
+  border: 3px solid rgb(0, 0, 0);
+  padding: 10px;
+}
+
+.test.stf__parent {
+  padding-top: 28px;
+}
+
+.closeIcon {
+  right: 190px;
+  top: 50px;
+  font-size: 40px;
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  z-index: 100;
+  filter:drop-shadow(5px 5px 5px rgb(87, 71, 66, 0.5))
+}
+
+.imgGenError {
+  color: red;
+}
+
+.optionMenu {
+  margin-top: 60px;
+  padding: 20px;
+  background-color: white;
+  color: black;
+  text-align: left;
+  width: 1600px;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+  border-radius: 30px;
+}
+.optionMenu h1 {
+  font-size: 2.5em;
+}
+.option {
+  
+}
+.optionLabel {
+  font-size: 1.3em;
+  padding-top: 30px;
+  padding-bottom: 10px;
+}
+.stylePicker {
+  width: 80%;
+  background-color: #abdff3;
+}
+.stylePickerLabel {
+  text-align: center;
+  font-size: 2em;
+}
+.styleOptions {
+  display: flex;
+  flex-flow: wrap;
+}
+.promptStyle {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 20px;
+}
+.selectedPromptStyle {
+  border-radius: 5px;
+  outline: 10px solid red;
+}
+.promptStyleLabel {
+  position: absolute;
+  bottom: 0px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  text-align: center;
+  width: 200px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black, 0 0 4em lightblue;
+  color: white;
+  background-color: rgba(0, 84, 117, 0.8);
+}
+.selectedPromptStyle .promptStyleLabel {
+  color: red;
+}
+.promptStyleImg {
+  width: 200px;
+  height: 200px;
+}
+#voiceDropdown {
+  width: 200px;
+  position: relative;
+  padding: 5px;
+  margin-bottom: 15px;
+  height: 40px;
+  border: 1px solid gray;
+  background: #ebebeb;
+  font-size: 1.2em;
 }

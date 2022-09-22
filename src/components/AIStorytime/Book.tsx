@@ -2,33 +2,21 @@ import React from 'react'
 import HTMLFlipBook from 'react-pageflip';
 
 export interface IBookProps {
-   title: string;
-   author: string;
-   coverImageUrl: string;
-   coverColor: string;
-   pages: string[];
+    index: number;
+    title: string;
+    author: string;
+    coverImageUrl: string;
+    coverColor: string;
+    pages: string[];
+    onClickBookCover: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 
-const Book: React.FC<IBookProps> = ({title, coverImageUrl, author, coverColor, pages}) => {
-
-  const handleButtonClick = (event : React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (event.currentTarget.classList.contains("opened")) {
-      event.currentTarget.classList.remove("opened");
-    }
-    else {
-      event.currentTarget.style.left = ""+event.currentTarget.getBoundingClientRect().left+"px";
-      event.currentTarget.style.top = ""+event.currentTarget.getBoundingClientRect().top+"px";
-      event.currentTarget.classList.add("opened");
-      event.currentTarget.style.left = "";
-      event.currentTarget.style.top = "";
-    }
-  }
-
+const Book: React.FC<IBookProps> = ({index, title, coverImageUrl, author, coverColor, pages, onClickBookCover}) => {
   return (
     <div className="book">
       <div className="book-card">
-        <div className="book-card-cover" onClick={handleButtonClick}>
+        <div className="book-card-cover" onClick={onClickBookCover} book-index={`${index}`}>
           <div className="book-card-book">
             <div className="book-card-book-front">
               <img className="book-card-img" src={coverImageUrl} />
