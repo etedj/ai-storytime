@@ -22,7 +22,10 @@ const OptionMenu: React.FC<IOptionMenufProps> = ({onProptStyleChange, onReadingO
   }
 
   return (
-    <div className="optionMenu">
+    <div id="optionMenu" className="optionMenu hidden">
+      <div className="optionsCloseIcon" onClick={()=>{
+        document.getElementById("optionMenu")?.classList.add("hidden");
+      }}>❌</div>
       <h1>OPTIONS</h1>
     
       <div className="option">
@@ -46,7 +49,7 @@ const OptionMenu: React.FC<IOptionMenufProps> = ({onProptStyleChange, onReadingO
       </div>
 
       <div className="option">
-        <div className="optionLabel">Reading Voice: </div>
+        <div className="optionLabel">Reading Voice</div>
         <select id="voiceDropdown" defaultValue={defaultVoice} onChange={(e)=>{ onVoiceChange(e.currentTarget.value) }}>
           {voices.map((voice, index) => {
               return (<option key={"voice"+index} value={voice.Value}>{voice.DisplayName}</option>)

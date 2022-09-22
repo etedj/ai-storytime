@@ -3,6 +3,7 @@ import OptionMenu from "./OptionMenu"
 import { books, booksImg } from "../../resources/books"
 import { useState } from "react"
 import { SpeechConfig, AudioConfig, SpeechSynthesizer, SpeakerAudioDestination} from "microsoft-cognitiveservices-speech-sdk"
+import SettingsIcon from "../../resources/images/setingsIcon.png"
 
 import OpenedBook from "./OpenedBook";
 
@@ -28,10 +29,6 @@ const AIStorytime = () => {
     let optionVoice = storyState.optionVoice;
 
     let browserSound = new SpeakerAudioDestination();
-    //const speechConfig = SpeechConfig.fromSubscription("7cc07b54925441818a3f08540a216422", "westus");
-    //const audioConfig = AudioConfig.fromSpeakerOutput(browserSound);
-    //speechConfig.speechSynthesisVoiceName = "en-US-AnaNeural"; 
-    //const synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
 
     const onPromptStyleChange = (newPromptStyle: string) => { optionPromptStyle = newPromptStyle; };
     const onReadingOnChange = (checked: boolean) => { optionReadingOn = checked; }
@@ -238,6 +235,7 @@ const AIStorytime = () => {
     {
         return (
             <div id="AIStoryTime">
+                <div id="settingsIconDiv" onClick={()=>{ document.getElementById("optionMenu")?.classList.remove("hidden"); }}><img id="settingsIcon" src={SettingsIcon}/></div>
                 <BookShelf onClickBookCover={ onMouseClickCover } />
                 <OpenedBook bookIndex={storyState.currentBook} onMouseMoveOverBook={onMouseMoveOverBook} onClose={closeBook} onPageTurn={pageTurn} onRedraw={loadPicture} />
                 <OptionMenu 
@@ -255,6 +253,7 @@ const AIStorytime = () => {
     else {
         return (
             <div id="AIStoryTime">
+                <div id="settingsIconDiv" onClick={()=>{ document.getElementById("optionMenu")?.classList.remove("hidden"); }}><img id="settingsIcon" src={SettingsIcon}/></div>
                 <BookShelf onClickBookCover={ onMouseClickCover } />
                 <OptionMenu 
                     onProptStyleChange={onPromptStyleChange} 
