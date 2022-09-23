@@ -3,7 +3,9 @@ body {
   text-align: center;
   font-family: Georgia, 'Times New Roman', Times, serif;
   background-color: #abdff3;
-  background-image: url(./resources/images/CloudCity.jpg);
+  background-image: url(./resources/images/sky.png);
+  background-position: 20% 56%;
+  background-repeat: no-repeat;
   background-size: cover;
   color: white;
 }
@@ -227,7 +229,7 @@ font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
   background-repeat: no-repeat;
   background-position: 0;
   z-index: 3;
-  filter:drop-shadow(var(--x-shadow) var(--y-shadow) 5px rgb(87, 71, 66, 0.3));
+  filter:drop-shadow(var(--x-shadow) var(--y-shadow) 5px rgba(0, 0, 0, 0.3));
 
 	opacity: 1;
 	animation-name: fadeInOpacity;;
@@ -404,7 +406,9 @@ img.ai-image {
 }
 .optionMenu h1 {
   font-size: 2.5em;
-
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-variant-caps: small-caps;
+  margin-top: 35px;
 }
 .option {
   
@@ -413,6 +417,8 @@ img.ai-image {
   font-size: 1.3em;
   padding-top: 30px;
   padding-bottom: 10px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-variant-caps: small-caps;
 }
 .stylePicker {
   position: absolute;
@@ -420,18 +426,22 @@ img.ai-image {
   right:60px;
   width: 970px;
   height: 820px;
-  background-color: #abdff3;
+  background-color: #bdbdbd;
   border-radius: 25px;
 }
 .stylePickerLabel {
   text-align: center;
-  font-size: 3em;
+  font-size: 3.2em;
   margin-top: 30px;
+  font-variant: small-caps;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 .styleOptions {
   display: flex;
   flex-flow: wrap;
   justify-content: center;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 .promptStyle {
   position: relative;
@@ -441,7 +451,8 @@ img.ai-image {
 }
 .selectedPromptStyle {
   border-radius: 5px;
-  outline: 10px solid red;
+  outline: 10px solid #c0ff00;
+  box-shadow: 20px 20px 15px #4c4c4c;
 }
 .promptStyleLabel {
   position: absolute;
@@ -451,14 +462,15 @@ img.ai-image {
   text-align: center;
   width: 200px;
   text-align: center;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 25px;
+  font-weight: 500;
+  font-variant-caps: all-small-caps;
   text-shadow: 1px 1px 2px black, 0 0 4em lightblue;
   color: white;
-  background-color: rgba(0, 84, 117, 0.8);
+  background-color: rgba(71, 58, 72, 0.7);
 }
 .selectedPromptStyle .promptStyleLabel {
-  color: red;
+  color: #c0ff00;
 }
 .promptStyleImg {
   width: 200px;
@@ -486,11 +498,11 @@ img.ai-image {
   filter:drop-shadow(5px 5px 5px rgb(87, 71, 66, 0.5))
 }
 #settingsIconDiv {
-  position: absolute;
-  top:60px;
-  right: 60px;
-  width: 100px;
-  height: 100px;
+  position: fixed;
+  top: 60px;
+  right: 80px;
+  width: 160px;
+  height: 160px;
   cursor: pointer;
   transition: all 0.2s;
   z-index: 10;
@@ -501,10 +513,15 @@ img.ai-image {
 }
 #settingsIcon {
   filter: drop-shadow(0 0 25px black);
-  width: 100px;
+  width: 160px;
 }
 .headerImg {
-  filter:drop-shadow(5px 5px 5px rgba(0, 0, 0, 1))
+  filter: drop-shadow(5px 5px 5px rgb(95, 95, 95));
+}
+.optionMenu details {
+  margin-top: 40px;
+  line-height: 1.4em;
+  font-size: 1.2em;
 }
 
 footer {
@@ -515,4 +532,131 @@ footer {
   font-size: 1.1em;
   font-variant-caps: small-caps;
   text-shadow: 2px 2px 5px black;
+}
+
+#debugBar {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 4px;
+  background-color: red;
+  font-size: 18px;
+  color: black;
+}
+#debugBar.fetchInProgress {
+  background-color: greenyellow;
+}
+#debugBar.hidden {
+  display: none;
+}
+
+
+#generateStoryButton {
+  width: 400px;
+  height: 60px;
+  font-size: 2em;
+  font-family: "mrs-eaves", Georgia, 'Times New Roman', Times, serif;
+  font-variant-caps: small-caps;
+  background-color: #d9ddbd;
+  border-radius: 15px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.53);
+  transition: all 0.5s;
+  margin-top: 50px;
+  margin-bottom: 60px;
+}
+#generateStoryButton.hidden {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  transition: all 0.5s;
+  font-size: 1px;
+}
+.generateStoryCloseIcon {
+  right: 10px;
+  top: 10px;
+  font-size: 40px;
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  z-index: 100;
+  filter:drop-shadow(5px 5px 5px rgb(87, 71, 66, 0.5))
+}
+#generateStoryForm {
+  width: 600px;
+  height: 460px;
+  padding: 30px 50px;
+  background-color: #d9ddbd;
+  color: black;
+  text-align: left;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20%);
+  position: fixed;
+  border-radius: 30px;
+  box-shadow: 5px 5px 20px black;
+  transition: all 0.5s;
+  z-index: 100;
+  font-family: "mrs-eaves", Georgia, 'Times New Roman', Times, serif;
+}
+#generateStoryForm.hidden {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  bottom: 0;
+  top: 100%;
+  left: 50%;
+  transition: all 0.5s;
+  opacity: 0;
+}
+#generateStoryFormTitle {
+  font-size: 3em;
+  font-variant-caps: small-caps;
+  text-align: center;
+  margin: 20px;
+}
+#generateStoryForm.hidden .optionsCloseIcon {
+  display: none;
+}
+.generateStoryLabel {
+  font-size: 1.3em;
+  font-variant-caps: small-caps;
+  text-align: center;
+}
+.generateStoryInput {
+  font-size: 1.6em;
+  margin-bottom: 20px;
+  padding: 10px;
+  font-family: "mrs-eaves", Georgia, 'Times New Roman', Times, serif;
+  font-variant-caps: small-caps;
+  width: 100%;
+}
+#generateStorySubmitButtonDiv {
+  text-align: center;
+  margin: 20px;
+}
+#generateStorySubmitButton {
+  align-self: center;
+  width: 300px;
+  height: 50px;
+  font-size: 2em;
+  font-family: "mrs-eaves", Georgia, 'Times New Roman', Times, serif;
+  font-variant-caps: small-caps;
+  border-radius: 15px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.53);
+  transition: all 0.5s;
+}
+#loadingGif {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 30px;
+  border-radius: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.35);
+}
+#loadingGif.hidden {
+  display: none;
 }

@@ -6,13 +6,12 @@ export interface IBookProps {
     title: string;
     author: string;
     coverImageUrl: string;
-    coverColor: string;
     pages: string[];
     onClickBookCover: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 
-const Book: React.FC<IBookProps> = ({index, title, coverImageUrl, author, coverColor, pages, onClickBookCover}) => {
+const Book: React.FC<IBookProps> = ({index, title, coverImageUrl, author,  pages, onClickBookCover}) => {
   return (
     <div className="book">
       <div className="book-card">

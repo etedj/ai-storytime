@@ -24,7 +24,7 @@ const OpenedBook: React.FC<IOpenedBookProps> = ({bookIndex, onMouseMoveOverBook,
     <div className="bookPage" key={`title-book-${bookIndex}`}>
         <div className="titlePage" id="bookPage1" >
             <h1 className="titlePageTitle">{books[bookIndex].Title}</h1>
-            <h4>by {books[bookIndex].Author}</h4>
+            <h4> by {books[bookIndex].Author}</h4>
         </div>
     </div>
     );

@@ -8,12 +8,24 @@ import photo from './images/promptStyles/photo.png'
 import streetArt from './images/promptStyles/streetArt.png'
 import anime from './images/promptStyles/anime.png'
 import rococo from './images/promptStyles/rococo.png'
+import stainedGlass from './images/promptStyles/stainedGlass.png'
+import ukiyoe from './images/promptStyles/ukiyoe.png'
 
 export const promptStypes = [
     {
         "DisplayName": "Digital Art",
         "Value": ", digital art, Trending on ArtStation",
         "Image": digitalArt
+    }, 
+    {
+        "DisplayName": "Rococo",
+        "Value": ", Rococo Painting",
+        "Image": rococo
+    }, 
+    {
+        "DisplayName": "Pencil",
+        "Value": ", Graphite, Pencil",
+        "Image": pencil
     }, 
     {
         "DisplayName": "8-Bit",
@@ -29,6 +41,11 @@ export const promptStypes = [
         "DisplayName": "Cubism",
         "Value": ", Cubist, Cubism",
         "Image": cubism
+    },  
+    {
+        "DisplayName": "Street Art",
+        "Value": ", Street Art, Graffiti",
+        "Image": streetArt
     }, 
     {
         "DisplayName": "3D Render",
@@ -36,28 +53,23 @@ export const promptStypes = [
         "Image": threeDeeRender
     }, 
     {
-        "DisplayName": "Pencil",
-        "Value": ", Graphite, Pencil",
-        "Image": pencil
-    }, 
-    {
         "DisplayName": "Photo",
         "Value": ", Canon50, Photoshoot, Portrait",
         "Image": photo
     }, 
     {
-        "DisplayName": "Street Art",
-        "Value": ", Street Art, Graffiti",
-        "Image": streetArt
-    }, 
+        "DisplayName": "Ukiyo-E",
+        "Value": ", Ukiyo-E",
+        "Image": ukiyoe
+    },
     {
         "DisplayName": "Anime",
         "Value": ", Anime",
         "Image": anime
     }, 
     {
-        "DisplayName": "Rococo",
-        "Value": ", Rococo Painting",
-        "Image": rococo
+        "DisplayName": "Stained Glass",
+        "Value": ", Stained Glass",
+        "Image": stainedGlass
     }
 ];

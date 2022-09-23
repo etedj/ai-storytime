@@ -11,7 +11,7 @@ const BookShelf: React.FC<IBookShelfProps> = ({onClickBookCover}) => {
     <div className='book-shelf'>
       {books.map((book, index) => {
         return (
-          <Book key={index} title={book.Title} author={book.Author} coverImageUrl={booksImg[index]} coverColor={book.CoverColor} pages={book.Pages} index={index} onClickBookCover={onClickBookCover} />
+          <Book key={index} title={book.Title} author={book.Author} coverImageUrl={booksImg[index]} pages={book.Pages} index={index} onClickBookCover={onClickBookCover} />
         )
       })
        }

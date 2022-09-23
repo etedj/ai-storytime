@@ -2,18 +2,22 @@ import React from 'react'
 import { voices } from '../../resources/voices';
 import { promptStypes } from '../../resources/promptStyles';
 
-export interface IOptionMenufProps {
+export interface IOptionMenuProps {
   onProptStyleChange: (newPromptStyle: string) => void;  
   onReadingOnChange: (checked: boolean) => void;  
   onImageGenOnChange: (checked: boolean) => void;  
+  onDemoModeOnChange: (checked: boolean) => void;  
+  onDebugOnChange: (checked: boolean) => void;  
   onVoiceChange: (voice: string) => void;
   defaultReadingOn: boolean,
   defaultImageGenOn: boolean,
   defaultPropertyStyle: string,
   defaultVoice: string
+  defaultDemoModeOn: boolean
+  defaultDegugOn: boolean
 }
 
-const OptionMenu: React.FC<IOptionMenufProps> = ({onProptStyleChange, onReadingOnChange, onImageGenOnChange, onVoiceChange, defaultReadingOn, defaultImageGenOn, defaultPropertyStyle, defaultVoice}) => {
+const OptionMenu: React.FC<IOptionMenuProps> = ({onProptStyleChange, onReadingOnChange, onImageGenOnChange, onVoiceChange, onDemoModeOnChange, onDebugOnChange, defaultReadingOn, defaultImageGenOn, defaultPropertyStyle, defaultVoice, defaultDemoModeOn, defaultDegugOn}) => {
   
   const onClickPromptStyle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, promptStyle: string) => {
     document.getElementsByClassName("selectedPromptStyle")[0].classList.remove("selectedPromptStyle");
@@ -26,7 +30,7 @@ const OptionMenu: React.FC<IOptionMenufProps> = ({onProptStyleChange, onReadingO
       <div className="optionsCloseIcon" onClick={()=>{
         document.getElementById("optionMenu")?.classList.add("hidden");
       }}>❌</div>
-      <h1>OPTIONS</h1>
+      <h1>Options</h1>
     
       <div className="option">
         <div className="optionLabel">Image Generation</div>
@@ -57,8 +61,28 @@ const OptionMenu: React.FC<IOptionMenufProps> = ({onProptStyleChange, onReadingO
         </select>
       </div>
 
+      <div className="option">
+        <div className="optionLabel">Demo Mode</div>
+        <label className="toggler-wrapper style-15">
+            <input type="checkbox"  defaultChecked={defaultDemoModeOn} onChange={(e) => { onDemoModeOnChange(e.currentTarget.checked) }} />
+            <div className="toggler-slider">
+                <div className="toggler-knob"></div>
+            </div>
+        </label>
+      </div>
+
+      <div className="option">
+        <div className="optionLabel">Debug Mode</div>
+        <label className="toggler-wrapper style-15">
+            <input type="checkbox"  defaultChecked={defaultDegugOn} onChange={(e) => { onDebugOnChange(e.currentTarget.checked) }} />
+            <div className="toggler-slider">
+                <div className="toggler-knob"></div>
+            </div>
+        </label>
+      </div>
+
       <div className="stylePicker">
-        <div className="stylePickerLabel">Choose an Art Style</div>
+        <div className="stylePickerLabel">Select Art Style</div>
         <div className="styleOptions">
         {
           promptStypes.map((promptStyle, index) => {
@@ -83,6 +107,13 @@ const OptionMenu: React.FC<IOptionMenufProps> = ({onProptStyleChange, onReadingO
             
         </div>
       </div>
+
+      <details>
+        <summary>Configuration</summary>
+        StableDiffusion URL: <br/><input type="text" id="StableDiffusionURL" /><br/>
+        OpenAI Key: <br/><input type="text" id="OpenAIKey" /> <br/>
+        Azure Key: <br/><input type="text" id="AzureKey" /><br/>
+      </details>
 
     </div>
     
