@@ -121,8 +121,10 @@ font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
   height: 500px;
 }
 .book-card {
+  position: absolute;
   width: 300px;
-  height: 410px;
+  min-height: 430px;
+  max-height: 550px;
   color: black;
   text-align: center;
   font-family: Georgia, 'Times New Roman', Times, serif;
@@ -210,6 +212,17 @@ font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
 }
 .book-card-cover.opened:hover .book-card-book {
   transform: none;
+}
+.downloadBtn {
+  font-size: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.downloadDiv {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 
@@ -410,12 +423,9 @@ img.ai-image {
   font-variant-caps: small-caps;
   margin-top: 35px;
 }
-.option {
-  
-}
 .optionLabel {
   font-size: 1.3em;
-  padding-top: 30px;
+  padding-top: 10px;
   padding-bottom: 10px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-variant-caps: small-caps;
@@ -520,8 +530,12 @@ img.ai-image {
 }
 .optionMenu details {
   margin-top: 40px;
+  margin-left: -20px;
   line-height: 1.4em;
   font-size: 1.2em;
+  width: 200px;
+  padding: 20px;
+  background-color: white;
 }
 
 footer {
@@ -584,19 +598,19 @@ footer {
 }
 #generateStoryForm {
   width: 600px;
-  height: 460px;
+  height: 300px;
   padding: 30px 50px;
   background-color: #d9ddbd;
   color: black;
   text-align: left;
-  top: 20%;
+  top: 30%;
   left: 50%;
-  transform: translateX(-50%) translateY(-20%);
+  transform: translateX(-50%) translateY(-30%);
   position: fixed;
   border-radius: 30px;
   box-shadow: 5px 5px 20px black;
   transition: all 0.5s;
-  z-index: 100;
+  z-index: 90;
   font-family: "mrs-eaves", Georgia, 'Times New Roman', Times, serif;
 }
 #generateStoryForm.hidden {
@@ -614,6 +628,7 @@ footer {
   font-variant-caps: small-caps;
   text-align: center;
   margin: 20px;
+  margin-bottom: 30px;
 }
 #generateStoryForm.hidden .optionsCloseIcon {
   display: none;
@@ -625,7 +640,7 @@ footer {
 }
 .generateStoryInput {
   font-size: 1.6em;
-  margin-bottom: 20px;
+  margin: 10px 0;
   padding: 10px;
   font-family: "mrs-eaves", Georgia, 'Times New Roman', Times, serif;
   font-variant-caps: small-caps;

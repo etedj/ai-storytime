@@ -1,5 +1,4 @@
 import React from 'react'
-import HTMLFlipBook from 'react-pageflip';
 
 export interface IBookProps {
     index: number;
@@ -8,10 +7,11 @@ export interface IBookProps {
     coverImageUrl: string;
     pages: string[];
     onClickBookCover: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    onDownloadClick: (bookIndex: number) => void;
 }
 
 
-const Book: React.FC<IBookProps> = ({index, title, coverImageUrl, author,  pages, onClickBookCover}) => {
+const Book: React.FC<IBookProps> = ({index, title, coverImageUrl, author,  pages, onClickBookCover, onDownloadClick}) => {
   return (
     <div className="book">
       <div className="book-card">
@@ -32,6 +32,16 @@ const Book: React.FC<IBookProps> = ({index, title, coverImageUrl, author,  pages
             {author}
           </div>
         </div>
+        {
+          (() => {
+            if (index > 4)
+            {
+              return (<div className="downloadDiv">
+                <button className="downloadBtn" onClick={() => onDownloadClick(index)}>⭳</button>
+            </div>)
+            }
+          })()
+       }
       </div>
     </div>
   )

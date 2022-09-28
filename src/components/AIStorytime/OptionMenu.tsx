@@ -9,15 +9,20 @@ export interface IOptionMenuProps {
   onDemoModeOnChange: (checked: boolean) => void;  
   onDebugOnChange: (checked: boolean) => void;  
   onVoiceChange: (voice: string) => void;
+  onSpeedChange: (speed: number) => void;
+  onAutoPageTurnOnChange: (checked: boolean) => void;  
   defaultReadingOn: boolean,
   defaultImageGenOn: boolean,
   defaultPropertyStyle: string,
   defaultVoice: string
+  defaultSpeed: number
   defaultDemoModeOn: boolean
   defaultDegugOn: boolean
+  defaultAutoPageTurnOn: boolean
+  importJson: (json:string) => void;
 }
 
-const OptionMenu: React.FC<IOptionMenuProps> = ({onProptStyleChange, onReadingOnChange, onImageGenOnChange, onVoiceChange, onDemoModeOnChange, onDebugOnChange, defaultReadingOn, defaultImageGenOn, defaultPropertyStyle, defaultVoice, defaultDemoModeOn, defaultDegugOn}) => {
+const OptionMenu: React.FC<IOptionMenuProps> = ({onProptStyleChange, onReadingOnChange, onImageGenOnChange, onVoiceChange, onDemoModeOnChange, onDebugOnChange, onAutoPageTurnOnChange, onSpeedChange, defaultReadingOn, defaultImageGenOn, defaultPropertyStyle, defaultVoice, defaultDemoModeOn, defaultDegugOn, defaultAutoPageTurnOn, defaultSpeed, importJson}) => {
   
   const onClickPromptStyle = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, promptStyle: string) => {
     document.getElementsByClassName("selectedPromptStyle")[0].classList.remove("selectedPromptStyle");
@@ -51,6 +56,16 @@ const OptionMenu: React.FC<IOptionMenuProps> = ({onProptStyleChange, onReadingOn
             </div>
         </label>
       </div>
+      
+      <div className="option">
+        <div className="optionLabel">Auto Page Turns</div>
+        <label className="toggler-wrapper style-15">
+            <input type="checkbox"  defaultChecked={defaultAutoPageTurnOn} onChange={(e) => { onAutoPageTurnOnChange(e.currentTarget.checked) }} />
+            <div className="toggler-slider">
+                <div className="toggler-knob"></div>
+            </div>
+        </label>
+      </div>
 
       <div className="option">
         <div className="optionLabel">Reading Voice</div>
@@ -59,6 +74,17 @@ const OptionMenu: React.FC<IOptionMenuProps> = ({onProptStyleChange, onReadingOn
               return (<option key={"voice"+index} value={voice.Value}>{voice.DisplayName}</option>)
           })}          
         </select>
+      </div>
+
+      <div className="option">
+        <div className="optionLabel">Reading Speed</div>
+        <input type="range" defaultValue={defaultSpeed} min="1.0" max="3.0" step="0.25" onChange={(e) => {
+          const speed = e.currentTarget.value;
+          //@ts-ignore
+          document.getElementById("speedValue").innerText = speed;
+          onSpeedChange(parseFloat(speed));
+        }} />
+        <span id="speedValue">{defaultSpeed}</span>
       </div>
 
       <div className="option">
@@ -103,16 +129,24 @@ const OptionMenu: React.FC<IOptionMenuProps> = ({onProptStyleChange, onReadingOn
               )
             }
           })
-        }
-            
+        }            
         </div>
+      </div>
+      
+      <div className="option">
+        <div className="optionLabel">Upload Book</div>
+        <input type="file" accept=".json" onChange={(event) => {
+            event?.currentTarget?.files?.item(0)?.text().then((fileContents)=>{
+              importJson(fileContents);
+            })
+        }}></input>
       </div>
 
       <details>
         <summary>Configuration</summary>
-        StableDiffusion URL: <br/><input type="text" id="StableDiffusionURL" /><br/>
-        OpenAI Key: <br/><input type="text" id="OpenAIKey" /> <br/>
-        Azure Key: <br/><input type="text" id="AzureKey" /><br/>
+        StableDiffusion URL: <br/><input type="text" id="StableDiffusionURL" defaultValue="" /><br/>
+        OpenAI Key: <br/><input type="text" id="OpenAIKey" defaultValue="" /> <br/>
+        Azure Key: <br/><input type="text" id="AzureKey" defaultValue="" /><br/>
       </details>
 
     </div>

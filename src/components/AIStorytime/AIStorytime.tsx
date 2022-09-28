@@ -18,12 +18,15 @@ const AIStorytime = () => {
         optionReadingOn: true,
         optionImageGenOn: true,
         optionVoice: "en-US-AnaNeural",
+        optionSpeed: 1.25,
         optionDemoModeOn: false,
-        optionDebugOn: false
+        optionDebugOn: true,
+        optionAutoPageTurn: false
     });
     
     let audioResumeTimeout : any = null;
-    let demoModeSeed = 138;
+    let audioEndTimeout : any = null;
+    let demoModeSeed = 139;
     let seed = 0;
     
     interface imageGenRequest {
@@ -34,7 +37,11 @@ const AIStorytime = () => {
     let imageGenQueue = useRef(new Array<imageGenRequest>());
     let currentPage = useRef(-1);
     let setIntervalTimer: MutableRefObject<any> = useRef(null);
+    let pageTurnTimer: MutableRefObject<any> = useRef(null);
     let fetchInProgress = useRef(false);  
+    let readingFinished = useRef(false);
+    let readingPage = useRef(0);
+    let turnTimerStarted = useRef(false);
     
     /* Options */
     let currentBook = useRef(storyState.currentBook);
@@ -42,10 +49,15 @@ const AIStorytime = () => {
     let optionReadingOn = storyState.optionReadingOn;
     let optionImageGenOn = useRef(storyState.optionImageGenOn);
     let optionVoice = storyState.optionVoice;
+    let optionSpeed = storyState.optionSpeed;
     let optionDemoModeOn = useRef(storyState.optionDemoModeOn);
     let optionDebugOn = storyState.optionDebugOn;
+    let optionAutoPageTurn = useRef(storyState.optionAutoPageTurn);
     
     let browserSound = new SpeakerAudioDestination();
+    browserSound.onAudioEnd = () => {
+        readingFinished.current = true;
+    }
 
     const onPromptStyleChange = (newPromptStyle: string) => { optionPromptStyle.current = newPromptStyle; };
     const onReadingOnChange = (checked: boolean) => { 
@@ -56,7 +68,12 @@ const AIStorytime = () => {
     }
     const onImageGenOnChange = (checked: boolean) => { optionImageGenOn.current = checked; }
     const onDemoModeOnChange = (checked: boolean) => { optionDemoModeOn.current = checked; }
+    const onAutoPageTurn = (checked: boolean) => { optionAutoPageTurn.current = checked; }
     const onVoiceChange = (newVoice: string) => { optionVoice = newVoice; }
+    const onSpeedChange = (newSpeed: number) => { 
+        optionSpeed = newSpeed; 
+        browserSound.internalAudio.playbackRate = optionSpeed
+    }
     const onDebugOnChange = (checked: boolean) => { 
         optionDebugOn = checked; 
         if (optionDebugOn) {
@@ -118,30 +135,43 @@ const AIStorytime = () => {
     }
     
 
-    const onGenerateStoryFormSubmit = (title: string, author: string, subjectOfStory: string, generateCoverImage: boolean) => {
+    const onGenerateStoryFormSubmit = (subjectOfStory: string) => {
         const configuration = new Configuration({
             apiKey: (document.getElementById("OpenAIKey") as HTMLInputElement).value,
           });
           const openai = new OpenAIApi(configuration);
+
+          // Get Book Text
           const response = openai.createCompletion({
             model: "text-davinci-002",
-            prompt: "Write a strange fable about " +  subjectOfStory,
-            temperature: 0,
-            max_tokens: 300,
+            prompt: "Write a fairy tale about " +  subjectOfStory,
+            temperature: 0.9,
+            max_tokens: 1000,
           }).
           then((response) => {
             console.log(response);
 
             let bookContents = response?.data?.choices?.at(0)?.text;
 
-            let coverImageUrl = RobotBookCover;
+            // Get Book Title
+            const titleResponse = openai.createCompletion({
+                model: "text-davinci-002",
+                prompt: "Write a title for this story: \"" +  bookContents + "\"",
+                temperature: 0.9,
+                max_tokens: 20,
+              }).
+              then((response) => {
+                console.log(response);
+    
+                let bookTitle = response?.data?.choices?.at(0)?.text ?? "ERROR";
+        
+                let coverImageUrl = RobotBookCover;
 
-            if (generateCoverImage) {
-                fetch("https://"+(document.getElementById("StableDiffusionURL") as HTMLInputElement).value+"/image", {
+                fetch("http://"+(document.getElementById("StableDiffusionURL") as HTMLInputElement).value+"/image", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify( {
-                        "prompt": title,
+                        "prompt": bookTitle + ", Fantasy Book Cover, Trending on ArtStation",
                         "num_outputs": 1,
                         "num_inference_steps": "50",
                         "guidance_scale": "7.5",
@@ -158,19 +188,15 @@ const AIStorytime = () => {
                 (result) => {
                     coverImageUrl = result?.output?.at(0)?.data ?? RobotBookCover;
                     fetchInProgress.current = false;
-                    addBookAndClosePrompt(title, author, bookContents ?? "Error getting books contents", coverImageUrl);
+                    addBookAndClosePrompt(bookTitle, "Storytime AI", bookContents ?? "Error getting books contents", coverImageUrl);
                 },
                 (error) => {
                     console.log(error);        
                     fetchInProgress.current = false;
                 });
-            }
-            else {
-                addBookAndClosePrompt(title, author, bookContents ?? "Error getting books contents", coverImageUrl);
-            }
-            
+            });
 
-          });
+        });
 
     }
 
@@ -183,9 +209,34 @@ const AIStorytime = () => {
             optionImageGenOn: optionImageGenOn.current,
             optionVoice: optionVoice,
             optionDemoModeOn: optionDemoModeOn.current,
-            optionDebugOn: optionDebugOn
+            optionDebugOn: optionDebugOn,
+            optionAutoPageTurn: optionAutoPageTurn.current,
+            optionSpeed: optionSpeed,
         })
     };
+
+    const onDownloadClick = (bookIndex: number) => {
+        const fileName = books[bookIndex].Title.replace(" ", "-");
+        const saveObj = {
+            book: books[bookIndex],
+            bookImg: booksImg[bookIndex]
+        }
+        const json = JSON.stringify(saveObj, null, 4);
+        const blob = new Blob([json],{type:'application/json'});
+        const href = URL.createObjectURL(blob); // Create a downloadable link
+        const link = document.createElement('a');       
+        link.href = href;
+        link.download = fileName + ".json";
+        document.body.appendChild(link);   // This can any part of your website
+        link.click();
+        document.body.removeChild(link);
+    }
+    const importJsonBook = (json: string) => {
+        const importedBook = JSON.parse(json);
+        books.push(importedBook.book);
+        booksImg.push(importedBook.bookImg);
+        setCurrentBook(-1);
+    }
 
     const tryProcessNextPicture = () => {
 
@@ -200,6 +251,25 @@ const AIStorytime = () => {
         else  {
             debugBarDiv?.classList.remove("fetchInProgress");
         }
+
+        // Handle Auto Page Turns
+        if (optionAutoPageTurn.current == true &&
+            readingFinished.current === true &&
+            readingPage.current < currentPage.current  && 
+            turnTimerStarted.current == false) {
+
+                readingFinished.current = false;                
+                turnTimerStarted.current = true;
+
+                clearInterval(pageTurnTimer.current);
+                pageTurnTimer.current = setTimeout(() => {
+                    clearInterval(pageTurnTimer.current);
+                    turnTimerStarted.current = false;
+                
+                    //@ts-ignore
+                    window.flipNext();
+                }, 1000);
+            }
 
         // Are we ready to pull something off the Queue?
         if (currentBook.current !== -1 && !fetchInProgress.current && imageGenQueue.current.length > 0) {
@@ -231,7 +301,7 @@ const AIStorytime = () => {
                     seed = demoModeSeed;
                 }
         
-                fetch("https://"+(document.getElementById("StableDiffusionURL") as HTMLInputElement).value+"/image", {
+                fetch("http://"+(document.getElementById("StableDiffusionURL") as HTMLInputElement).value+"/image", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify( {
@@ -250,7 +320,7 @@ const AIStorytime = () => {
                 .then(res => res.json())
                 .then(
                 (result) => {
-                    const imgData = result?.output[0]?.data;
+                    const imgData = result?.output.at(0)?.data;
                     if (imgData == null) {
                         if (imageNode != null) {
                             imageNode.innerHTML = "<h1 class='imgGenError'>Error. No image data.</h1>";
@@ -285,6 +355,10 @@ const AIStorytime = () => {
 
 
     const readPage = (pageNumber: number) => {
+        clearInterval(pageTurnTimer.current);
+        readingPage.current = pageNumber;
+
+        readingFinished.current = false;
         browserSound.pause();
         clearTimeout(audioResumeTimeout);
         
@@ -297,24 +371,41 @@ const AIStorytime = () => {
             // Timeout is to prevent reading while quickly flipping through page
             // You must be on the page for a full second before reading starts
             audioResumeTimeout = setTimeout( () => {
-                browserSound = new SpeakerAudioDestination();
+                browserSound = new SpeakerAudioDestination();               
+                                
+                browserSound.onAudioStart = () => {
+                    console.log("Reading Started");
+                    browserSound.internalAudio.playbackRate = optionSpeed;
+                    browserSound.internalAudio.ontimeupdate = () => {
+                        clearTimeout(audioEndTimeout);
+                        audioEndTimeout = setTimeout(()=> {
+                            readingFinished.current = true;
+                            console.log("Done Reading");
+                            browserSound.internalAudio.ontimeupdate = null;
+                        }, 1000);
+                    }
+                }
                 const speechConfig = SpeechConfig.fromSubscription((document.getElementById("AzureKey") as HTMLInputElement).value, "westus");
                 const audioConfig = AudioConfig.fromSpeakerOutput(browserSound);
                 speechConfig.speechSynthesisVoiceName = optionVoice; 
                 const synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
-                synthesizer.speakTextAsync(textToRead);
+                synthesizer.speakTextAsync(textToRead, () => {
+                });
             }, 1000);
         }
     }
 
     const closeBook = () => {
+        readingPage.current = 0;
         if (storyState.currentBook === -1) {
             return;
         }        
         imageGenQueue.current = [];
         const openedBook = document.getElementsByClassName("openedBook")[0];
         openedBook.classList.add("hide");
-        fetch("https://eric.tedjamulia.com:9000/image/stop");
+        fetch("http://"+(document.getElementById("StableDiffusionURL") as HTMLInputElement).value+"/image/stop");
+        
+        readingFinished.current = false;
         
         // Stop Timer
         clearInterval(setIntervalTimer.current);
@@ -326,9 +417,9 @@ const AIStorytime = () => {
         }, 500);       
         
         currentPage.current = -1;
-        const openedCard = document.getElementsByClassName("opened")[0];
-        //TODO: Add third state to smoothly return to right location
+        const openedCard = document.getElementsByClassName("opened")[0] as HTMLDivElement;
         openedCard.classList.remove("opened");
+        //TODO: Add third state to smoothly return to right location
         browserSound.pause();
         clearTimeout(audioResumeTimeout);
     }
@@ -367,11 +458,29 @@ const AIStorytime = () => {
     {
         debugClass = "hidden";
     }
-         
+
+    if (storyState.currentBook !== -1) 
+    {
+        document.body.onkeydown = (event) => {
+            if (event.key == "ArrowLeft") { 
+                //@ts-ignore
+                window.flipPrev();
+                clearInterval(pageTurnTimer.current);
+
+            }
+            else if (event.key == "ArrowRight") {
+                //@ts-ignore
+                window.flipNext();
+                clearInterval(pageTurnTimer.current);
+            }
+
+        };
+    }
+
     return (
         <div id="AIStoryTime">
             <div id="settingsIconDiv" onClick={()=>{ document.getElementById("optionMenu")?.classList.remove("hidden"); }}><img id="settingsIcon" src={SettingsIcon}/></div>
-            <BookShelf onClickBookCover={ onMouseClickCover } />
+            <BookShelf onClickBookCover={ onMouseClickCover} onDownloadClick={onDownloadClick} />
             {
                 (() => { 
                     if (storyState.currentBook !== -1) 
@@ -397,13 +506,18 @@ const AIStorytime = () => {
                 onImageGenOnChange={onImageGenOnChange} 
                 onVoiceChange={onVoiceChange} 
                 onDemoModeOnChange={onDemoModeOnChange} 
-                onDebugOnChange={onDebugOnChange} 
+                onDebugOnChange={onDebugOnChange}
+                onAutoPageTurnOnChange={onAutoPageTurn}
+                onSpeedChange={onSpeedChange}
                 defaultReadingOn={storyState.optionReadingOn}
                 defaultImageGenOn={storyState.optionImageGenOn} 
                 defaultPropertyStyle={storyState.optionPromptStyle}
                 defaultVoice={storyState.optionVoice} 
                 defaultDemoModeOn={storyState.optionDemoModeOn} 
-                defaultDegugOn={storyState.optionDebugOn} />
+                defaultDegugOn={storyState.optionDebugOn} 
+                defaultAutoPageTurnOn={storyState.optionAutoPageTurn}
+                defaultSpeed={storyState.optionSpeed}
+                importJson = {importJsonBook} />
             <div id="debugBar" className={debugClass}></div>
             <button id="generateStoryButton" onClick={generateStoryButtonPressed}>Generate a new Fairy Tale</button>
             <GenerateStoryForm 

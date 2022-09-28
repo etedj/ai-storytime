@@ -11,6 +11,18 @@ export interface IOpenedBookProps {
 }
 
 const OpenedBook: React.FC<IOpenedBookProps> = ({bookIndex, onMouseMoveOverBook, onClose, onPageTurn, onRedraw }) => {
+
+    let pageFlip: any = null;
+    
+    //@ts-ignore
+    window.flipNext = () => {
+        pageFlip.pageFlip().flipNext('bottom');
+    }
+    //@ts-ignore
+    window.flipPrev = () => {
+        pageFlip.pageFlip().flipPrev('bottom');
+    }
+
     const pageDivs = [];
     pageDivs.push(
     <div className="bookPage" key={"cover"}>
@@ -82,6 +94,7 @@ const OpenedBook: React.FC<IOpenedBookProps> = ({bookIndex, onMouseMoveOverBook,
             showPageCorners={false} 
             disableFlipByClick={false}
             children={pageDivs} 
+            ref={(component) => (pageFlip = component)}
             onFlip={(e) => onPageTurn(e.data)} />
     </div>
   )
